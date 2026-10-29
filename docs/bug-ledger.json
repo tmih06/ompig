@@ -2910,6 +2910,25 @@
       ]
     },
     {
+      "id": "BF-1dc6989",
+      "title": "fix(extensions): regenerate the embedded SDK bundles after the rename",
+      "symptom": "fix(extensions): regenerate the embedded SDK bundles after the rename",
+      "rootCause": "The Go SDK ships as gzip bundles that a packed cell stages into .state/pigsdk, so a rebuild kept a pre-rename copy whose files still imported github.com/MichaelKinsy/PiG/extensions/sdk/*. A packed-cell build of any Go extension that uses the kit then failed with:",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "1dc698905b",
+          "date": "2026-10-29"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-1dcaef7",
       "title": "Durable: a JSONL line that starts with a byte order mark now opens, as in Pi, instead of failing with…",
       "symptom": "Durable: a JSONL line that starts with a byte order mark now opens, as in Pi, instead of failing with \"Malformed complete ... line N\".",

@@ -113,6 +113,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-1d02c73](#bf-1d02c73) | Filters that Pi writes with `toLowerCase()` (select lists, the config selector, file autocomplete, `/model`… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1d1c8aa](#bf-1d1c8aa) | RPC mode now ends by the signal when a termination signal arrives while a quit `session_shutdown` handler is… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1d5b272](#bf-1d5b272) | A text file passed as an `@file` argument that holds invalid UTF-8 now reaches the prompt as Pi sends it… | Ompig's own defect | All platforms | 0.5.0 |
+| [BF-1dc6989](#bf-1dc6989) | fix(extensions): regenerate the embedded SDK bundles after the rename | Ompig's own defect | All platforms | Unreleased |
 | [BF-1dcaef7](#bf-1dcaef7) | Durable: a JSONL line that starts with a byte order mark now opens, as in Pi, instead of failing with… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-1ed43b3](#bf-1ed43b3) | fix(train): load ompig_sdk.tui with the package, run the TS queue check with no runtime, pin three fixture… | Ompig's own defect | All platforms | Unreleased |
 | [BF-1ee7dea](#bf-1ee7dea) | The Mistral request URL for a base URL with a non-special scheme or a host or port the WHATWG parser rejects… | Ompig's own defect | All platforms | 0.5.0 |
@@ -2551,6 +2552,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `1d5b272feb` (2026-10-09), `433d232815` (2026-10-09)
 - **Tests:** `agent/convert_custom_upstream_test.go::TestConvertToLLMCustomMessagesMatchUpstreamConvertToLlm`, `agent/convert_custom_upstream_test.go::TestConvertToLLMToolFlowMatchesUpstreamTransformOrder`, `agent/convert_custom_upstream_test.go::TestCustomMessagesReachProvidersAsUpstreamContentBlocks`, `agent/transform_custom_user_boundary_test.go::TestAnthropicRequestAfterBranchSummaryHasNoOrphanToolResult`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomMessageWithoutWireOutputKeepsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMCustomUserMessageInterruptsToolFlow`, `agent/transform_custom_user_boundary_test.go::TestConvertToLLMHoldsSystemMessageUntilToolFlowCloses`, `coding/session_tree_wire_oracle_test.go::TestNavigateTreeEveryPointSendsValidToolFlow` and 2 more in docs/bug-ledger.json
 - **Release note:** A text file passed as an `@file` argument that holds invalid UTF-8 now reaches the prompt as Pi sends it: each ill-formed byte sequence becomes one U+FFFD replacement character. Pig previously copied the raw bytes, which later became one replacement character per byte.
+
+### BF-1dc6989
+
+**fix(extensions): regenerate the embedded SDK bundles after the rename**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(extensions): regenerate the embedded SDK bundles after the rename
+- **Root cause:** The Go SDK ships as gzip bundles that a packed cell stages into .state/pigsdk, so a rebuild kept a pre-rename copy whose files still imported github.com/MichaelKinsy/PiG/extensions/sdk/*. A packed-cell build of any Go extension that uses the kit then failed with:
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `1dc698905b` (2026-10-29)
+- **Tests:** None recorded.
 
 ### BF-1dcaef7
 
