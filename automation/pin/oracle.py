@@ -298,6 +298,9 @@ DURABLE = "@earendil-works/pi-durable"
 INTEROP = ["@earendil-works/chord", "@earendil-works/pi-ai", DURABLE, "@earendil-works/pi-telemetry"]
 LOCK_KEY = "node_modules/" + AGENT
 PACK_PREFIX = "ompig-pack:"
+# LEGACY_PACK_PREFIX is what the frozen closures committed before the ompig rename carry. A closure is frozen data, never
+# edited, so a reader accepts both while a new freeze writes only PACK_PREFIX.
+LEGACY_PACK_PREFIX = "pig-pack:"
 
 
 def frozen_lock_path(pin: Pin, root: str | None = None) -> Path:
@@ -344,8 +347,9 @@ def concrete_packs(lock: dict, packed: dict[str, Path]) -> dict:
     out = json.loads(json.dumps(lock))
     for key, item in out["packages"].items():
         resolved = item.get("resolved", "")
-        if resolved.startswith(PACK_PREFIX):
-            name = resolved[len(PACK_PREFIX):]
+        prefix = PACK_PREFIX if resolved.startswith(PACK_PREFIX) else LEGACY_PACK_PREFIX
+        if resolved.startswith(prefix):
+            name = resolved[len(prefix):]
             if name not in packed:
                 raise PinError(f"the frozen closure installs {name}, which the pinned source does not pack")
             item["resolved"] = "file:" + str(packed[name])

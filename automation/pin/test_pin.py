@@ -654,7 +654,11 @@ class ClosureTests(unittest.TestCase):
         self.assertIn("typebox", top, "pi-durable's source imports typebox: the Go tests that import it resolve it from durable/interop/node_modules")
         for name in oracle.INTEROP:
             item = lock["packages"]["node_modules/" + name]
-            self.assertTrue(item["resolved"].startswith(oracle.PACK_PREFIX), f"{name} must come from the pin's pack: {item['resolved']}")
+            # A frozen closure may predate the ompig rename and still carry the legacy token.
+            self.assertTrue(
+                item["resolved"].startswith((oracle.PACK_PREFIX, oracle.LEGACY_PACK_PREFIX)),
+                f"{name} must come from the pin's pack: {item['resolved']}",
+            )
         imported = json.loads((oracle.ROOT / "durable/interop/package.json").read_text())["dependencies"]
         photon = "@silvia-odwyer/photon"  # the image oracle's processor: durable/interop imports it beside the three packs
         self.assertIn(photon, top)
