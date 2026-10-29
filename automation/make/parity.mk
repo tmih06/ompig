@@ -82,32 +82,32 @@ test-inventory: ## Test-inventory validates the reviewed disposition mapping ove
 	@go run ./test/parity/cmd/testinventorycheck
 
 # Release law: no pending/partial hot-path tests and no decrease from the committed ported baseline.
-# The committed baseline must be reachable from public main. CI's clone names it origin; set PUBLIC_MAIN_REF to the
-# remote-tracking ref of public main in a clone that names that remote differently.
+# The committed baseline must be reachable from "public main". Set PUBLIC_MAIN_REF to name that ref explicitly; when it is
+# empty, PUBLIC_MAIN_REF_SH resolves the ref in the recipe's own shell.
 #
-# In a fork whose default branch is not "main" (this repository's is "master") there is no refs/remotes/origin/main, and
-# the gate would fail on a missing object rather than on a real drift. The default therefore falls back to the remote's
-# own default branch, which is what "public main" means for that clone. An explicit PUBLIC_MAIN_REF still wins.
-# Resolution order: an explicit override, then origin/main, then the remote's HEAD, then the local default branch, then
-# master. CI checks out a detached HEAD, where the symbolic ref is absent, so the last two keep the gate from passing an
-# empty revision to the checker.
-PUBLIC_MAIN_REF ?= $(shell \
+# A fixed refs/remotes/origin/main does not work everywhere: a fork whose default branch is master has no such ref, and a CI
+# checkout is a detached HEAD with no symbolic origin/HEAD. The resolver asks origin/main, then origin/HEAD, then any
+# branch, then the commit, which is reachable from itself.
+PUBLIC_MAIN_REF ?=
+PUBLIC_MAIN_REF_SH = if [ -n '$(PUBLIC_MAIN_REF)' ]; then echo '$(PUBLIC_MAIN_REF)'; else \
   for ref in refs/remotes/origin/main refs/remotes/origin/HEAD refs/heads/main refs/heads/master; do \
     if git rev-parse --verify -q "$$ref" >/dev/null 2>&1; then echo "$$ref"; exit 0; fi; \
-  done; echo refs/remotes/origin/main)
+  done; \
+  branch=$$(git for-each-ref --format='%(refname)' --count=1 refs/remotes refs/heads 2>/dev/null); \
+  if [ -n "$$branch" ]; then echo "$$branch"; else git rev-parse HEAD 2>/dev/null || echo HEAD; fi; fi
 
 test-porting-release: ## Enforce hot-path closure or explicit approved known gaps, without lowering the committed baseline
-	@go run ./test/parity/cmd/testinventorycheck -public-main-ref '$(PUBLIC_MAIN_REF)' -release-policy test/parity/interfaces/test-porting-policy-v$(UPSTREAM_VERSION).json
+	@go run ./test/parity/cmd/testinventorycheck -public-main-ref "$$($(PUBLIC_MAIN_REF_SH))" -release-policy test/parity/interfaces/test-porting-policy-v$(UPSTREAM_VERSION).json
 
 # known-gaps regenerates the current-state block of the 0.3.x known-gaps ledger from the checker's own mapping and policy data; known-gaps-drift fails when the committed block differs.
 KNOWN_GAPS_DOC := docs/parity/KNOWN-GAPS-0.3.x.md
 KNOWN_GAPS_POLICY := test/parity/interfaces/test-porting-policy-v$(UPSTREAM_VERSION).json
 
 known-gaps: ## Regenerate the marked current-state block of docs/parity/KNOWN-GAPS-0.3.x.md
-	@go run ./test/parity/cmd/testinventorycheck -public-main-ref '$(PUBLIC_MAIN_REF)' -release-policy $(KNOWN_GAPS_POLICY) -write-known-gaps $(KNOWN_GAPS_DOC)
+	@go run ./test/parity/cmd/testinventorycheck -public-main-ref "$$($(PUBLIC_MAIN_REF_SH))" -release-policy $(KNOWN_GAPS_POLICY) -write-known-gaps $(KNOWN_GAPS_DOC)
 
 known-gaps-drift: ## Fail when the KNOWN-GAPS-0.3.x.md current-state block differs from the checker's data
-	@go run ./test/parity/cmd/testinventorycheck -public-main-ref '$(PUBLIC_MAIN_REF)' -release-policy $(KNOWN_GAPS_POLICY) -check-known-gaps $(KNOWN_GAPS_DOC)
+	@go run ./test/parity/cmd/testinventorycheck -public-main-ref "$$($(PUBLIC_MAIN_REF_SH))" -release-policy $(KNOWN_GAPS_POLICY) -check-known-gaps $(KNOWN_GAPS_DOC)
 	@echo "known-gaps-drift: clean"
 
 .PHONY: test-porting-release known-gaps known-gaps-drift
