@@ -140,7 +140,7 @@ func TestHelpIsPisHelpWithOmpigCommandsAfterPisCommands(t *testing.T) {
 	}
 	var colored bytes.Buffer
 	printHelp(&colored, true)
-	if !strings.HasPrefix(colored.String(), "\x1b[1mpig\x1b[22m - ") || !strings.Contains(colored.String(), "\x1b[1mOptions:\x1b[22m") {
+	if !strings.HasPrefix(colored.String(), "\x1b[1mompig\x1b[22m - ") || !strings.Contains(colored.String(), "\x1b[1mOptions:\x1b[22m") {
 		t.Fatal("terminal help lacks bold headers")
 	}
 }

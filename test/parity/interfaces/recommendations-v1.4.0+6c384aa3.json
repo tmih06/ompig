@@ -24240,22 +24240,24 @@
     {
       "id": "pkg:ai/.#JsonPath",
       "upstreamShapeHash": "sha256:609915ca9a4de7b913f262bc34ab74d92423b95e90d5b9168538a9424f99c997",
-      "recommendedDisposition": "partial",
+      "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
+        "2 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
-        "pending",
+        "partial",
         "deferred",
         "designed-out",
         "divergence"
       ],
       "ompigCandidates": [
-        "go:github.com/tmih06/ompig/ai#JSONPath"
+        "go:github.com/tmih06/ompig/ai#JSONPath",
+        "go:github.com/tmih06/ompig/coding/subagent#Artifacts.JSONPath"
       ],
       "missingClosure": [
+        "candidate-disambiguation",
         "shape-translation-review",
         "production-reachability",
         "required-layers",
@@ -25484,7 +25486,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "17 normalized-name Ompig candidates are ambiguous."
+        "18 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -25510,6 +25512,7 @@
         "go:github.com/tmih06/ompig/extensions/sdk#ExtensionContext.Model",
         "go:github.com/tmih06/ompig/extensions/sdk#ExtensionToolContext.Model",
         "go:github.com/tmih06/ompig/extensions/sdk#ReplacedSessionContext.Model",
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model",
         "go:github.com/tmih06/ompig/internal/codingagent/llama#Model"
       ],
       "missingClosure": [
@@ -43628,22 +43631,24 @@
     {
       "id": "pkg:ai/.#Usage",
       "upstreamShapeHash": "sha256:8a7bcee0bd41b2b0aebf3d4686c021018b3b234becf65641fd78aa25123aac5b",
-      "recommendedDisposition": "partial",
+      "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
+        "2 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
-        "pending",
+        "partial",
         "deferred",
         "designed-out",
         "divergence"
       ],
       "ompigCandidates": [
-        "go:github.com/tmih06/ompig/ai#Usage"
+        "go:github.com/tmih06/ompig/ai#Usage",
+        "go:github.com/tmih06/ompig/coding/subagent#Usage"
       ],
       "missingClosure": [
+        "candidate-disambiguation",
         "shape-translation-review",
         "production-reachability",
         "required-layers",
@@ -81663,22 +81668,24 @@
     {
       "id": "pkg:ai/compat#JsonPath",
       "upstreamShapeHash": "sha256:609915ca9a4de7b913f262bc34ab74d92423b95e90d5b9168538a9424f99c997",
-      "recommendedDisposition": "partial",
+      "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
+        "2 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
-        "pending",
+        "partial",
         "deferred",
         "designed-out",
         "divergence"
       ],
       "ompigCandidates": [
-        "go:github.com/tmih06/ompig/ai#JSONPath"
+        "go:github.com/tmih06/ompig/ai#JSONPath",
+        "go:github.com/tmih06/ompig/coding/subagent#Artifacts.JSONPath"
       ],
       "missingClosure": [
+        "candidate-disambiguation",
         "shape-translation-review",
         "production-reachability",
         "required-layers",
@@ -82907,7 +82914,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "17 normalized-name Ompig candidates are ambiguous."
+        "18 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -82933,6 +82940,7 @@
         "go:github.com/tmih06/ompig/extensions/sdk#ExtensionContext.Model",
         "go:github.com/tmih06/ompig/extensions/sdk#ExtensionToolContext.Model",
         "go:github.com/tmih06/ompig/extensions/sdk#ReplacedSessionContext.Model",
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model",
         "go:github.com/tmih06/ompig/internal/codingagent/llama#Model"
       ],
       "missingClosure": [
@@ -101051,22 +101059,24 @@
     {
       "id": "pkg:ai/compat#Usage",
       "upstreamShapeHash": "sha256:8a7bcee0bd41b2b0aebf3d4686c021018b3b234becf65641fd78aa25123aac5b",
-      "recommendedDisposition": "partial",
+      "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
+        "2 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
-        "pending",
+        "partial",
         "deferred",
         "designed-out",
         "divergence"
       ],
       "ompigCandidates": [
-        "go:github.com/tmih06/ompig/ai#Usage"
+        "go:github.com/tmih06/ompig/ai#Usage",
+        "go:github.com/tmih06/ompig/coding/subagent#Usage"
       ],
       "missingClosure": [
+        "candidate-disambiguation",
         "shape-translation-review",
         "production-reachability",
         "required-layers",
@@ -134389,22 +134399,24 @@
     {
       "id": "pkg:ai/utils/streaming-json#JsonPath",
       "upstreamShapeHash": "sha256:609915ca9a4de7b913f262bc34ab74d92423b95e90d5b9168538a9424f99c997",
-      "recommendedDisposition": "partial",
+      "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
+        "2 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
-        "pending",
+        "partial",
         "deferred",
         "designed-out",
         "divergence"
       ],
       "ompigCandidates": [
-        "go:github.com/tmih06/ompig/ai#JSONPath"
+        "go:github.com/tmih06/ompig/ai#JSONPath",
+        "go:github.com/tmih06/ompig/coding/subagent#Artifacts.JSONPath"
       ],
       "missingClosure": [
+        "candidate-disambiguation",
         "shape-translation-review",
         "production-reachability",
         "required-layers",
@@ -137139,21 +137151,23 @@
     {
       "id": "pkg:chord/.#Cell",
       "upstreamShapeHash": "sha256:f247ad56ecd266dfc751504d19642a2819c5909aa00c8f5612373a7e376d273e",
-      "recommendedDisposition": "pending",
+      "recommendedDisposition": "partial",
       "confidence": "low",
       "basis": [
-        "No normalized-name candidate exists in the scanned Ompig production packages."
+        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
       ],
       "alternatives": [
         "ported",
-        "partial",
+        "pending",
         "deferred",
         "designed-out",
         "divergence"
       ],
-      "ompigCandidates": [],
+      "ompigCandidates": [
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#cell"
+      ],
       "missingClosure": [
-        "ompig-go-shape",
+        "shape-translation-review",
         "production-reachability",
         "required-layers",
         "behavioral-evidence"
@@ -138824,21 +138838,23 @@
     {
       "id": "pkg:chord/.#Draft",
       "upstreamShapeHash": "sha256:7676130f8d9b3dbdcfefd2c6cdaff439f6e38867ca5ae4e7759ee5bc8368b731",
-      "recommendedDisposition": "pending",
+      "recommendedDisposition": "partial",
       "confidence": "low",
       "basis": [
-        "No normalized-name candidate exists in the scanned Ompig production packages."
+        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
       ],
       "alternatives": [
         "ported",
-        "partial",
+        "pending",
         "deferred",
         "designed-out",
         "divergence"
       ],
-      "ompigCandidates": [],
+      "ompigCandidates": [
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.Draft"
+      ],
       "missingClosure": [
-        "ompig-go-shape",
+        "shape-translation-review",
         "production-reachability",
         "required-layers",
         "behavioral-evidence"
@@ -143925,7 +143941,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "6 normalized-name Ompig candidates are ambiguous."
+        "9 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -143936,8 +143952,11 @@
       ],
       "ompigCandidates": [
         "go:github.com/tmih06/ompig/coding#AgentSessionServices.Registry",
+        "go:github.com/tmih06/ompig/coding#SubagentRuntime.Registry",
         "go:github.com/tmih06/ompig/coding/extension/installresolver#registry",
         "go:github.com/tmih06/ompig/coding/piglogin#registry",
+        "go:github.com/tmih06/ompig/coding/subagent#Registry",
+        "go:github.com/tmih06/ompig/coding/subagent#Runner.Registry",
         "go:github.com/tmih06/ompig/extensions/sdk#ModelRuntime.registry",
         "go:github.com/tmih06/ompig/extensions/sdk/upgrade#filePlanner.registry",
         "go:github.com/tmih06/ompig/tui/internal/hljs#Registry"
@@ -151046,21 +151065,23 @@
     {
       "id": "pkg:chord/delta#Draft",
       "upstreamShapeHash": "sha256:7676130f8d9b3dbdcfefd2c6cdaff439f6e38867ca5ae4e7759ee5bc8368b731",
-      "recommendedDisposition": "pending",
+      "recommendedDisposition": "partial",
       "confidence": "low",
       "basis": [
-        "No normalized-name candidate exists in the scanned Ompig production packages."
+        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
       ],
       "alternatives": [
         "ported",
-        "partial",
+        "pending",
         "deferred",
         "designed-out",
         "divergence"
       ],
-      "ompigCandidates": [],
+      "ompigCandidates": [
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.Draft"
+      ],
       "missingClosure": [
-        "ompig-go-shape",
+        "shape-translation-review",
         "production-reachability",
         "required-layers",
         "behavioral-evidence"
@@ -152540,7 +152561,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "14 normalized-name Ompig candidates are ambiguous."
+        "15 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -152559,6 +152580,7 @@
         "go:github.com/tmih06/ompig/extensions/sdk#AgentSessionRuntime.apply",
         "go:github.com/tmih06/ompig/extensions/sdk#runSignal.apply",
         "go:github.com/tmih06/ompig/extensions/sdk/upgrade#filePlanner.apply",
+        "go:github.com/tmih06/ompig/internal/codingagent#agentHubController.apply",
         "go:github.com/tmih06/ompig/internal/codingagent#scopedModelsSelection.apply",
         "go:github.com/tmih06/ompig/internal/codingagent#terminalInputPass.apply",
         "go:github.com/tmih06/ompig/internal/codingagent#themeSubmenu.apply",
@@ -258830,7 +258852,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "13 normalized-name Ompig candidates are ambiguous."
+        "14 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -258851,6 +258873,7 @@
         "go:github.com/tmih06/ompig/extensions/sdk/frontend#Theme",
         "go:github.com/tmih06/ompig/internal/codingagent#ExtUIContext.Theme",
         "go:github.com/tmih06/ompig/internal/codingagent#InteractiveMode.theme",
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Model.theme",
         "go:github.com/tmih06/ompig/tui#SettingsList.theme",
         "go:github.com/tmih06/ompig/tui#Theme"
       ],
@@ -279475,7 +279498,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "8 normalized-name Ompig candidates are ambiguous."
+        "9 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -279489,6 +279512,7 @@
         "go:github.com/tmih06/ompig/ai#toolArgumentSchemas.entry",
         "go:github.com/tmih06/ompig/coding#sessionToolRegistry.entry",
         "go:github.com/tmih06/ompig/coding#virtualModelStore.entry",
+        "go:github.com/tmih06/ompig/coding/subagent#Entry",
         "go:github.com/tmih06/ompig/extensions/sdk/kit#Entry",
         "go:github.com/tmih06/ompig/internal/codingagent#lazyTree.entry",
         "go:github.com/tmih06/ompig/internal/codingagent#treeNodeAdapter.entry",
@@ -283359,7 +283383,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "6 normalized-name Ompig candidates are ambiguous."
+        "9 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -283370,8 +283394,11 @@
       ],
       "ompigCandidates": [
         "go:github.com/tmih06/ompig/coding#AgentSessionServices.Registry",
+        "go:github.com/tmih06/ompig/coding#SubagentRuntime.Registry",
         "go:github.com/tmih06/ompig/coding/extension/installresolver#registry",
         "go:github.com/tmih06/ompig/coding/piglogin#registry",
+        "go:github.com/tmih06/ompig/coding/subagent#Registry",
+        "go:github.com/tmih06/ompig/coding/subagent#Runner.Registry",
         "go:github.com/tmih06/ompig/extensions/sdk#ModelRuntime.registry",
         "go:github.com/tmih06/ompig/extensions/sdk/upgrade#filePlanner.registry",
         "go:github.com/tmih06/ompig/tui/internal/hljs#Registry"
@@ -284390,7 +284417,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "10 normalized-name Ompig candidates are ambiguous."
+        "13 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -284402,6 +284429,9 @@
       "ompigCandidates": [
         "go:github.com/tmih06/ompig/coding#Runtime.Session",
         "go:github.com/tmih06/ompig/coding#Session",
+        "go:github.com/tmih06/ompig/coding#subagentAgentsTool.session",
+        "go:github.com/tmih06/ompig/coding#subagentTaskTool.session",
+        "go:github.com/tmih06/ompig/coding#subagentWaitTool.session",
         "go:github.com/tmih06/ompig/coding/extension/builtin/codemode#session",
         "go:github.com/tmih06/ompig/coding/extension/host/subprocess#toolRenderSessions.session",
         "go:github.com/tmih06/ompig/extensions/sdk#AgentSessionRuntime.Session",
@@ -293248,21 +293278,23 @@
     {
       "id": "pkg:durable/.#Wrap",
       "upstreamShapeHash": "sha256:50a95f0d0504bab12ce043aff804c291f7e23e1941cf2f14793a34dbdfbad339",
-      "recommendedDisposition": "pending",
+      "recommendedDisposition": "partial",
       "confidence": "low",
       "basis": [
-        "No normalized-name candidate exists in the scanned Ompig production packages."
+        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
       ],
       "alternatives": [
         "ported",
-        "partial",
+        "pending",
         "deferred",
         "designed-out",
         "divergence"
       ],
-      "ompigCandidates": [],
+      "ompigCandidates": [
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#wrap"
+      ],
       "missingClosure": [
-        "ompig-go-shape",
+        "shape-translation-review",
         "production-reachability",
         "required-layers",
         "behavioral-evidence"
@@ -294003,22 +294035,24 @@
     {
       "id": "pkg:durable/.#section",
       "upstreamShapeHash": "sha256:39b91335a6563b813182012d02877dba7d96c6622ddc2029f80564ec3fa281ca",
-      "recommendedDisposition": "partial",
+      "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."
+        "2 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
-        "pending",
+        "partial",
         "deferred",
         "designed-out",
         "divergence"
       ],
       "ompigCandidates": [
+        "go:github.com/tmih06/ompig/internal/codingagent/agenthub#Section",
         "go:github.com/tmih06/ompig/internal/codingagent/prompts#section"
       ],
       "missingClosure": [
+        "candidate-disambiguation",
         "shape-translation-review",
         "production-reachability",
         "required-layers",
@@ -299443,7 +299477,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "11 normalized-name Ompig candidates are ambiguous."
+        "12 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -299457,6 +299491,7 @@
         "go:github.com/tmih06/ompig/ai#AssistantMessageEventStream.Result",
         "go:github.com/tmih06/ompig/ai#EventStream.Result",
         "go:github.com/tmih06/ompig/coding/ompiglet/release#Result",
+        "go:github.com/tmih06/ompig/coding/subagent#Result",
         "go:github.com/tmih06/ompig/extensions/sdk#ModelEventStream.Result",
         "go:github.com/tmih06/ompig/extensions/sdk/upgrade#Result",
         "go:github.com/tmih06/ompig/internal/codingagent#customOverlay.Result",
@@ -367012,7 +367047,7 @@
       "recommendedDisposition": "pending",
       "confidence": "low",
       "basis": [
-        "9 normalized-name Ompig candidates are ambiguous."
+        "14 normalized-name Ompig candidates are ambiguous."
       ],
       "alternatives": [
         "ported",
@@ -367024,6 +367059,11 @@
       "ompigCandidates": [
         "go:github.com/tmih06/ompig/coding/mcpext#Terminal",
         "go:github.com/tmih06/ompig/coding/mcpext/mcptui#Terminal",
+        "go:github.com/tmih06/ompig/coding/subagent#Status.Terminal",
+        "go:github.com/tmih06/ompig/coding/subagent#StatusAborted.Terminal",
+        "go:github.com/tmih06/ompig/coding/subagent#StatusIdle.Terminal",
+        "go:github.com/tmih06/ompig/coding/subagent#StatusParked.Terminal",
+        "go:github.com/tmih06/ompig/coding/subagent#StatusRunning.Terminal",
         "go:github.com/tmih06/ompig/internal/codingagent#currentRendererTUI.Terminal",
         "go:github.com/tmih06/ompig/internal/codingagent#ownerInvalidatingRenderer.Terminal",
         "go:github.com/tmih06/ompig/tui#Terminal",
