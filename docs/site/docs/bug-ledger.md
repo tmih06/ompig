@@ -582,6 +582,7 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 | [BF-7809364](#bf-7809364) | Schema errors of a `ChordError` of code `invalid` list their members in the order the value arrived in, as… | Ompig's own defect | All platforms | Unreleased |
 | [BF-78c4c6c](#bf-78c4c6c) | `pig piglet add` now names the offending bundled path and where it came from (for example `Package herdr… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-78f2d55](#bf-78f2d55) | `pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in… | A fix Pi shipped that Ompig ported | All platforms | 0.5.0 |
+| [BF-797fa58](#bf-797fa58) | fix(fixtures): require the tagged SDK in every Go fixture module | Ompig's own defect | All platforms | Unreleased |
 | [BF-79eadcf](#bf-79eadcf) | Long sessions no longer slow down each streamed frame in the main screen: a frame redraws from the first line… | Ompig's own defect | All platforms | 0.5.0 |
 | [BF-79f9a9e](#bf-79f9a9e) | fix(agent): convert a live partial with one clone and keep events at an unchanged publication (TU-T7 rest) | Ompig's own defect | All platforms | Unreleased |
 | [BF-7a4a8e8](#bf-7a4a8e8) | fix duplicate jsstring import in tui/assistant_message_block.go | Ompig's own defect | All platforms | Unreleased |
@@ -9053,6 +9054,19 @@ Entries are listed by ID. The page carries no totals, so a pull request that add
 - **Fix commits:** `78f2d55ded` (2026-10-12)
 - **Tests:** `coding/cli/mcp_command_test.go::TestPigMcpHelpIsPisHelpWithPiGsIdentity`, `coding/mcpext/cli_oracle_test.go::TestMcpCommandMatchesPi`, `coding/mcpext/cli_test.go::TestMcpCommandHelpIsPisHelpWithPiGsIdentity`
 - **Release note:** `pig mcp login --help` described `--timeout` as only the wait for the browser; it limits the whole sign-in, as Pi 148622bc now says.
+
+### BF-797fa58
+
+**fix(fixtures): require the tagged SDK in every Go fixture module**
+
+- **Source:** Ompig's own defect
+- **Symptom:** fix(fixtures): require the tagged SDK in every Go fixture module
+- **Root cause:** 36 conformance and example modules still required the pre-rename SDK pseudo-version, which go build rejects now that extensions/sdk tags exist (the revision is not a descendant of a preceding tag). Each keeps its replace to the local checkout, so the version is only a resolution key.
+- **User impact:** Behavior differed from Pi
+- **Platform:** All platforms
+- **Fixed in:** Unreleased
+- **Fix commits:** `797fa58ac9` (2026-10-29)
+- **Tests:** None recorded.
 
 ### BF-79eadcf
 

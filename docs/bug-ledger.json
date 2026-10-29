@@ -16897,6 +16897,25 @@
       ]
     },
     {
+      "id": "BF-797fa58",
+      "title": "fix(fixtures): require the tagged SDK in every Go fixture module",
+      "symptom": "fix(fixtures): require the tagged SDK in every Go fixture module",
+      "rootCause": "36 conformance and example modules still required the pre-rename SDK pseudo-version, which go build rejects now that extensions/sdk tags exist (the revision is not a descendant of a preceding tag). Each keeps its replace to the local checkout, so the version is only a resolution key.",
+      "rootCauseSource": "commit",
+      "userImpact": "Behavior differed from Pi",
+      "platform": "All platforms",
+      "class": "own",
+      "fixedIn": "Unreleased",
+      "origin": "commit",
+      "commits": [
+        {
+          "hash": "797fa58ac9",
+          "date": "2026-10-29"
+        }
+      ],
+      "tests": []
+    },
+    {
       "id": "BF-79eadcf",
       "title": "Long sessions no longer slow down each streamed frame in the main screen: a frame redraws from the first line…",
       "symptom": "Long sessions no longer slow down each streamed frame in the main screen: a frame redraws from the first line that changed instead of re-rendering and comparing the whole transcript, with the same terminal output.",
